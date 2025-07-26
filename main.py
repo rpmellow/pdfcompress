@@ -6,6 +6,10 @@ from io import BytesIO
 
 app = FastAPI()
 
+@app.get("/")
+def read_root():
+    return {"Hello": "World"}
+
 @app.post("/compress")
 async def compress_pdf(file: UploadFile = File(...)):
     # Step 1: First compression using pypdf
