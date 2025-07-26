@@ -3,7 +3,15 @@ from fastapi.responses import HTMLResponse, StreamingResponse
 from fastapi.templating import Jinja2Templates
 from pypdf import PdfReader, PdfWriter
 from PyPDF2 import PdfReader as PR, PdfWriter as PW
+from fastapi.middleware.cors import CORSMiddleware
 from io import BytesIO
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # Replace with your frontend domain in production
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 app = FastAPI()
 
