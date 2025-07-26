@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>PDF Compressor</title>
+</head>
+<body>
+  <h2>Upload PDF to Compress</h2>
+
+  <form id="pdfForm" enctype="multipart/form-data">
+    <input type="file" name="file" accept="application/pdf" required />
+    <button type="submit">Compress PDF</button>
+  </form>
+
+  <script>
+    document.getElementById("pdfForm").addEventListener("submit", async function (e) {
+      e.preventDefault();
+
+      const form = e.target;
+      const formData = new FormData(form);
+
+      const response = await fetch("http://localhost:8000/compress", {
+        method: "POST",
+        body: formData,
+      });
+
+      if (response.ok) {
+        const blob = await response.blob();
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = "compressed.pdf";
+        a.click();
+        window.URL.revokeObjectURL(url);
+      } else {
+        alert("Compression failed.");
+      }
+    });
+  </script>
+</body>
+</html>
