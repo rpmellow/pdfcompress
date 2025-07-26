@@ -1,0 +1,2 @@
+[build]
+      command = "uvicorn your_filename:app --reload"
