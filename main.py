@@ -1,14 +1,19 @@
 from fastapi import FastAPI, UploadFile, File
 from fastapi.responses import StreamingResponse
+from fastapi.templating import Jinja2Templates
 from pypdf import PdfReader, PdfWriter
 from PyPDF2 import PdfReader as PR, PdfWriter as PW
 from io import BytesIO
 
 app = FastAPI()
 
-@app.get("/")
-def read_root():
-    return {"Hello": "World"}
+templates = Jinja2Templates(directory="templates")
+
+# Serve HTML form at "/"
+@app.get("/", response_class=HTMLResponse)
+async def serve_form(request: Request):
+    return templates.TemplateResponse("index.html", {"request": request})
+
 
 @app.post("/compress")
 async def compress_pdf(file: UploadFile = File(...)):
