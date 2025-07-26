@@ -1,2 +1,2 @@
 [build]
-      command = "uvicorn your_filename:app --reload"
+      command = "uvicorn mail:app --reload"
