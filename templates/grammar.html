@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Grammar Checker</title>
+</head>
+<body>
+    <h2>Grammar Correction</h2>
+
+    <form action="/correct" method="post">
+        <textarea name="text" rows="6" cols="80" placeholder="Enter text here...">{{ original_text or "" }}</textarea><br><br>
+        <button type="submit">Correct Grammar</button>
+    </form>
+
+    {% if corrected_text %}
+    <h3>Corrected:</h3>
+    <p style="white-space: pre-wrap; border: 1px solid #ccc; padding: 10px;">
+        {{ corrected_text }}
+    </p>
+    {% endif %}
+</body>
+</html>
