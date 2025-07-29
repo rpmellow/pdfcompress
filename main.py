@@ -7,7 +7,6 @@ from fastapi.middleware.cors import CORSMiddleware
 from io import BytesIO
 
 from transformers import T5ForConditionalGeneration, T5Tokenizer
-from pydantic import BaseModel
 
 
 app = FastAPI()
