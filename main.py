@@ -5,9 +5,7 @@ from pypdf import PdfReader, PdfWriter
 from PyPDF2 import PdfReader as PR, PdfWriter as PW
 from fastapi.middleware.cors import CORSMiddleware
 from io import BytesIO
-
-from transformers import T5ForConditionalGeneration, T5Tokenizer
-
+from grammar import correct_grammar
 
 app = FastAPI()
 
@@ -71,25 +69,6 @@ async def compress_pdf(file: UploadFile = File(...)):
         headers={"Content-Disposition": f"attachment; filename=compressed_{file.filename}"}
     )
 
-
-
-
-# Load the grammar correction model (once, globally)
-model = T5ForConditionalGeneration.from_pretrained("vennify/t5-base-grammar-correction")
-tokenizer = T5Tokenizer.from_pretrained("vennify/t5-base-grammar-correction")
-
-def correct_grammar(text: str) -> str:
-    input_text = "grammar: " + text.strip()
-    input_ids = tokenizer.encode(input_text, return_tensors="pt", max_length=512, truncation=True)
-
-    outputs = model.generate(
-        input_ids,
-        max_length=128,
-        num_beams=4,
-        early_stopping=True
-    )
-
-    return tokenizer.decode(outputs[0], skip_special_tokens=True)
 
 @app.get("/grammar", response_class=HTMLResponse)
 async def show_form(request: Request):
