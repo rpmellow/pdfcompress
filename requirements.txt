@@ -5,3 +5,4 @@ pypdf[image]
 jinja2
 transformers
 torch
+sentencepiece
