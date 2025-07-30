@@ -59,7 +59,7 @@ async def compress_pdf(file: UploadFile = File(...)):
         headers={"Content-Disposition": f"attachment; filename=compressed_{file.filename}"}
     )
 
-@app.get("/", response_class=HTMLResponse)
+@app.get("/chat", response_class=HTMLResponse)
 async def get_chat_page(request: Request):
     return templates.TemplateResponse("chat.html", {"request": request})
 
