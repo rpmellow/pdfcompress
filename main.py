@@ -62,7 +62,7 @@ async def compress_pdf(file: UploadFile = File(...)):
 
 
 @app.get("/chat")
-async def chat_form(request: Request):
+async def chat_form():
     return templates.TemplateResponse("chat.html")
 
 
