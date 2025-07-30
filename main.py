@@ -5,6 +5,7 @@ from pypdf import PdfReader, PdfWriter
 from PyPDF2 import PdfReader as PR, PdfWriter as PW
 from fastapi.middleware.cors import CORSMiddleware
 from io import BytesIO
+from pydantic import BaseModel
 
 
 app = FastAPI()
