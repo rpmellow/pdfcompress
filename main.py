@@ -5,6 +5,7 @@ from pypdf import PdfReader, PdfWriter
 from PyPDF2 import PdfReader as PR, PdfWriter as PW
 from fastapi.middleware.cors import CORSMiddleware
 from io import BytesIO
+from pydantic import BaseModel
 
 
 app = FastAPI()
@@ -59,12 +60,18 @@ async def compress_pdf(file: UploadFile = File(...)):
         headers={"Content-Disposition": f"attachment; filename=compressed_{file.filename}"}
     )
 
+# Define input model for POST body
+class ChatInput(BaseModel):
+    text: str
+
+# Serve the HTML frontend
 @app.get("/chat", response_class=HTMLResponse)
 async def get_chat_page(request: Request):
     return templates.TemplateResponse("chat.html", {"request": request})
 
+# API endpoint for chat
 @app.post("/api/chat")
-async def chat_api(request: Request):
-    data = await request.json()  # Read raw JSON
-    user_text = data.get("text", "")
-    return JSONResponse(content={"response": f"Bot: You said '{user_text}'"})
+async def chat_api(input: ChatInput):
+    user_text = input.text
+    # Replace this with your actual logic
+    return {"response": f"Bot: You said '{user_text}'"}
