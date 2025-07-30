@@ -1,11 +1,10 @@
 from fastapi import FastAPI, UploadFile, File, Request
-from fastapi.responses import HTMLResponse, StreamingResponse
+from fastapi.responses import HTMLResponse, StreamingResponse, JSONResponse
 from fastapi.templating import Jinja2Templates
 from pypdf import PdfReader, PdfWriter
 from PyPDF2 import PdfReader as PR, PdfWriter as PW
 from fastapi.middleware.cors import CORSMiddleware
 from io import BytesIO
-from pydantic import BaseModel
 
 
 app = FastAPI()
@@ -60,16 +59,12 @@ async def compress_pdf(file: UploadFile = File(...)):
         headers={"Content-Disposition": f"attachment; filename=compressed_{file.filename}"}
     )
 
-
-@app.get("/chat")
-async def chat_form():
-    return templates.TemplateResponse("chat.html")
-
-
-class InputText(BaseModel):
-    text: str
+@app.get("/", response_class=HTMLResponse)
+async def get_chat_page(request: Request):
+    return templates.TemplateResponse("chat.html", {"request": request})
 
 @app.post("/api/chat")
-async def chat_api(input: InputText):
-    # Replace this with your actual logic
-    return {"response": f"You said: {input.text}"}
+async def chat_api(request: Request):
+    data = await request.json()  # Read raw JSON
+    user_text = data.get("text", "")
+    return JSONResponse(content={"response": f"Bot: You said '{user_text}'"})
